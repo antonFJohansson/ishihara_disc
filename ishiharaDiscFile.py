@@ -84,7 +84,8 @@ def create_ishihara_disc(num_circles = 720, disc_size = 0.42,
 
 import cairo
 def plot_ishihara_disc(store_circle_x, store_circle_y, store_rad,
-                       save_name = 'ishihara_disc.png', PIXEL_SCALE = 1000):
+                       object_circles, save_name = 'ishihara_disc.png',
+                       PIXEL_SCALE = 1000):
     
     
     surface = cairo.ImageSurface(cairo.FORMAT_RGB24,
@@ -96,8 +97,15 @@ def plot_ishihara_disc(store_circle_x, store_circle_y, store_rad,
     for iii in range(store_circle_x.shape[0]):
         ctx.arc(store_circle_x[iii], store_circle_y[iii], store_rad[iii], 0, math.pi*2)
         ctx.close_path()
-        ctx.set_source_rgb(0, 1, 1)
-    ctx.fill()
+        if object_circles[iii] == 1:
+            ctx.set_source_rgb(0, 1, 1)
+            ctx.fill()
+            
+        else:
+            ctx.set_source_rgb(0, 1, 0)
+            ctx.fill()
+            
+    
     
 
     surface.write_to_png(save_name)
