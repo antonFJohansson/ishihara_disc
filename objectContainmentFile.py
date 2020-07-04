@@ -4,14 +4,15 @@ Created on Sat Jul  4 17:04:18 2020
 
 @author: johaant
 """
-from numpy import asarray
+from numpy import asarray, uint8
 from PIL import Image
 
 class contained_pixel():
      
-    def __init__(self, object_path, object_colour):
+    def __init__(self, object_img, object_colour):
 
-        image = Image.open(object_path)
+        object_img = uint8(object_img)
+        image = Image.fromarray(object_img)
         image = image.convert('1')
         self.max_side = max(image.size)
         self.valid_pos = lambda x: int(x) if x < self.max_side else self.max_side - 1
@@ -22,6 +23,7 @@ class contained_pixel():
             
         ## Convert to numpy array
         self.img = asarray(image)
+
         self.object_colour = object_colour
     
     def check_pixel_containment(self, x, y):
@@ -40,9 +42,9 @@ class contained_pixel():
         return all(pixel_store)
 
 
-def check_object_containment(x_pos, y_pos, object_path, object_colour = 0):
+def check_object_containment(x_pos, y_pos, object_img, object_colour = 0):
     
-    object_prop = contained_pixel(object_path, object_colour)
+    object_prop = contained_pixel(object_img, object_colour)
     
     
     object_circle_store = asarray(x_pos.shape[0]*[-1.])

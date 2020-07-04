@@ -99,7 +99,7 @@ def plot_ishihara_disc(store_circle_x, store_circle_y, store_rad,
     ctx.fill()
             
     for iii in range(store_circle_x.shape[0]):
-        ctx.arc(store_circle_x[iii], store_circle_y[iii], store_rad[iii], 0, math.pi*2)
+        ctx.arc(store_circle_y[iii], store_circle_x[iii], store_rad[iii], 0, math.pi*2)
         ctx.close_path()
         if object_circles[iii] == 1:
             new_colour = get_colour('red-green', foreground = False)
