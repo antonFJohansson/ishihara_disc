@@ -15,7 +15,7 @@ HEIGHT = 1
 PIXEL_SCALE = 1000
 num_circles = 720
 save_name = 'ishihara_disc_1.png'
-object_path = 'object_img_2.PNG'
+object_path = 'object_img.PNG'
 
 x_pos, y_pos, rad = create_ishihara_disc(num_circles = num_circles)
 object_img = manipulate_object(object_path)
