@@ -22,17 +22,34 @@ def shift_image(shift_key, img):
         img=np.roll(img, 1, axis = 1)
     return img
 
-
-def manipulate_object(object_path):
+def change_size(size_key, img, max_disp):
+    
+    curr_obj_size = img.shape[0]
+    if size_key == ord('i'):
+        new_img = cv2.resize(img, (curr_obj_size + 1, curr_obj_size + 1), Image.ANTIALIAS)
+    else:
+        new_img = cv2.resize(img, (curr_obj_size - 1, curr_obj_size - 1), Image.ANTIALIAS)
+        
+    ## We always want the image to be 600x600
+    if new_img.shape[0] > max_disp:
+        new_img = new_img[0:max_disp, 0:max_disp]
+    elif new_img.shape[0] < max_disp:
+        ## If the image is greyscale or not
+        if len(new_img.shape) > 2:
+            b_img = np.zeros((max_disp, max_disp, new_img.shape[2]))
+            b_img[0:new_img.shape[0],0:new_img.shape[0],:] = new_img
+        else:
+            b_img = np.zeros((max_disp, max_disp))
+            b_img[0:new_img.shape[0],0:new_img.shape[0]] = new_img
+        new_img = b_img
+    return new_img
+        
+def manipulate_object(object_path, max_disp = 600):
 
     image = Image.open(object_path)
     #image = image.convert('1')
-    max_disp = max(image.size) if max(image.size) < 600 else 600
-    
-    ## Reshape it to a square shape
-    if image.size[0] != image.size[1]:
-    
-        image = image.resize((max_disp, max_disp), Image.ANTIALIAS)
+
+    image = image.resize((max_disp, max_disp), Image.ANTIALIAS)
     
     img = np.asarray(image).astype(float)
     
@@ -46,14 +63,30 @@ def manipulate_object(object_path):
         #print('aaaa')
         key_press = cv2.waitKey(0)
         
+        ## Rotate the object
         if key_press == ord('r'):
             img = np.rot90(img)
             new_img = np.copy(img)
+        ## Translate the object
         elif key_press in [ord('w'), ord('a'), ord('s'), ord('d')]:
             img = shift_image(key_press, img)
             new_img = np.copy(img)
-        else:
+        ## Increase/decrease the size of the object
+        elif key_press in [ord('i'), ord('o')]:
+            img = change_size(key_press, img, max_disp)
+            new_img = np.copy(img)
+        elif key_press == ord('q'):
             break
+        else:
+            help_string = """
+            Press:
+                r: Rotate the object
+                w,a,s,d: Translate the object
+                i,o: Increase (i) or decrease (o) the size of the object.
+                q: Finish.
+                Other: Display help.
+            """
+            print(help_string)
     cv2.destroyAllWindows()
     
     return img
