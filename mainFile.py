@@ -20,6 +20,8 @@ x_pos, y_pos, rad = create_ishihara_disc(num_circles = num_circles)
 object_circles = check_object_containment(x_pos, y_pos, object_path)
 plot_ishihara_disc(x_pos, y_pos, rad, object_circles, save_name = save_name)
 
+
+
 #import matplotlib.pyplot as plt
 #plt.imshow(data)
 

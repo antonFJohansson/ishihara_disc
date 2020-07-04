@@ -8,6 +8,7 @@ Created on Sat Jul  4 16:50:27 2020
 import math
 import random
 from numpy import array, argmin, sqrt
+from colourFile import get_colour
 
 def create_ishihara_disc(num_circles = 720, disc_size = 0.42,
                          max_circle_rad = 0.02, min_circle_rad = 0.005,
@@ -93,16 +94,21 @@ def plot_ishihara_disc(store_circle_x, store_circle_y, store_rad,
                              PIXEL_SCALE)
     ctx = cairo.Context(surface)
     ctx.scale(PIXEL_SCALE, PIXEL_SCALE)
+    ctx.rectangle(0, 0, PIXEL_SCALE, PIXEL_SCALE)
+    ctx.set_source_rgb(1, 1, 1)
+    ctx.fill()
             
     for iii in range(store_circle_x.shape[0]):
         ctx.arc(store_circle_x[iii], store_circle_y[iii], store_rad[iii], 0, math.pi*2)
         ctx.close_path()
         if object_circles[iii] == 1:
-            ctx.set_source_rgb(0, 1, 1)
+            new_colour = get_colour('red-green', foreground = False)
+            ctx.set_source_rgb(*new_colour)
             ctx.fill()
             
         else:
-            ctx.set_source_rgb(0, 1, 0)
+            new_colour = get_colour('red-green', foreground = True)
+            ctx.set_source_rgb(*new_colour)
             ctx.fill()
             
     
