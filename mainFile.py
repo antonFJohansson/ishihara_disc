@@ -25,7 +25,9 @@ plot_ishihara_disc(x_pos, y_pos, rad, object_circles, save_name = save_name)
 ## And now in the last step we would maybe like to just see that our object will look nice when we load it
 ## So maybe easiest to see that the image will be loaded in openCv into a np array or something
 
-
+## So tomorrow just add comments and function help
+## And then make it so that I can present it and put it on my website?
+## And maybe some more colour schemes
 
 
 #import matplotlib.pyplot as plt

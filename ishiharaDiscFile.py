@@ -87,20 +87,37 @@ import cairo
 def plot_ishihara_disc(store_circle_x, store_circle_y, store_rad,
                        object_circles, save_name = 'ishihara_disc.png',
                        PIXEL_SCALE = 1000):
+    """
+    Function to plot the ishihara disc.
+    Args:
+        store_circle_x: x-coordinates of the circles (numpy array)
+        store_circle_y: y-coordinates of the circles (numpy array)
+        store_rad: Radius of the circles (numpy array)
+        object_circles: Numpy array with 0,1 if the circle belongs in the object
+                or not.
+        save_name: Savename of the resulting image
+        PIXEL_SCALE: The size of the final image.
+    Returns:
+        None
+    """
     
-    
+    ## Create canvas
     surface = cairo.ImageSurface(cairo.FORMAT_RGB24,
                              PIXEL_SCALE,
                              PIXEL_SCALE)
     ctx = cairo.Context(surface)
     ctx.scale(PIXEL_SCALE, PIXEL_SCALE)
+    
+    ## Make background white
     ctx.rectangle(0, 0, PIXEL_SCALE, PIXEL_SCALE)
     ctx.set_source_rgb(1, 1, 1)
     ctx.fill()
             
+    ## Loop through all circles
     for iii in range(store_circle_x.shape[0]):
         ctx.arc(store_circle_y[iii], store_circle_x[iii], store_rad[iii], 0, math.pi*2)
         ctx.close_path()
+        ## If the circle lies in the object or not
         if object_circles[iii] == 1:
             new_colour = get_colour('red-green', foreground = False)
             ctx.set_source_rgb(*new_colour)
@@ -113,7 +130,7 @@ def plot_ishihara_disc(store_circle_x, store_circle_y, store_rad,
             
     
     
-
+    ## Create the final image
     surface.write_to_png(save_name)
 
     

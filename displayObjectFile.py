@@ -11,6 +11,9 @@ from PIL import Image
 import time
 
 def shift_image(shift_key, img):
+    """
+    Function to shift the object with the w,a,s,d keys.
+    """
     
     if shift_key == ord('w'):
         img=np.roll(img, -1, axis = 0)
@@ -23,6 +26,9 @@ def shift_image(shift_key, img):
     return img
 
 def change_size(size_key, img, max_disp):
+    """
+    Function to increase or decrease the size of the object.
+    """
     
     curr_obj_size = img.shape[0]
     if size_key == ord('i'):
@@ -46,21 +52,44 @@ def change_size(size_key, img, max_disp):
         
 def manipulate_object(object_path, max_disp = 600):
 
+    """
+    Function to manipulate the object before creating the ishihara disc
+    Args:
+        object_path: The path to the object image
+        max_disp: The size of the display image.
+    Returns:
+        img: Numpy array with the transformed object
+    """    
+
+    ## Load the object
     image = Image.open(object_path)
     #image = image.convert('1')
 
+    ## Resize image
     image = image.resize((max_disp, max_disp), Image.ANTIALIAS)
-    
     img = np.asarray(image).astype(float)
     
     #img = np.zeros((int(max_disp), int(max_disp)))
+    ## Need two images, one to manipulate and one to display
     new_img = np.copy(img)
     
+    help_string = """
+            Press:
+                r: Rotate the object.
+                w,a,s,d: Translate the object.
+                i,o: Increase (i) or decrease (o) the size of the object.
+                q: Finish.
+                Other: Display help.
+            """
+    
+    print(help_string)
+    ## Loop while manioulations are performed
     while True:
         #new_img = np.copy(img)
+        ## Create a representation of the ishihara disc
         new_img = cv2.circle(new_img, (int(max_disp/2), int(max_disp/2)), int(0.45*max_disp), (1,0,0), thickness=2, lineType=8, shift=0)
         cv2.imshow('Image', new_img)
-        #print('aaaa')
+
         key_press = cv2.waitKey(0)
         
         ## Rotate the object
@@ -78,28 +107,10 @@ def manipulate_object(object_path, max_disp = 600):
         elif key_press == ord('q'):
             break
         else:
-            help_string = """
-            Press:
-                r: Rotate the object
-                w,a,s,d: Translate the object
-                i,o: Increase (i) or decrease (o) the size of the object.
-                q: Finish.
-                Other: Display help.
-            """
             print(help_string)
     cv2.destroyAllWindows()
     
     return img
-
-## I can just try and save down the image here first
-## And then create my ishihara disc to see that it all works
-
-
-
-
-
-    
-cv2.destroyAllWindows() # destroys the window showing image
 
 
 

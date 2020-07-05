@@ -10,6 +10,15 @@ import random
 
 def get_colour(colour_type, foreground):
     
+    """
+    Function to retrieve colour schemes for the ishihara discs.
+    Args:
+        colour_type: Which colour scheme to use (String)
+        foreground: If the current circle represents the object or not
+    Returns:
+        A random colour from the colour scheme.
+    """
+    
 
     red_green = {'Background': ['FFD006', 'EFBD89', 'CC725D', 'F1971C', 'EA9079'],
               'Object': ['A5AF70', '529465', 'C8C78F']}
