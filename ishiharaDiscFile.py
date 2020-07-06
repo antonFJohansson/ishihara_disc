@@ -85,7 +85,8 @@ def create_ishihara_disc(num_circles = 720, disc_size = 0.42,
 
 import cairo
 def plot_ishihara_disc(store_circle_x, store_circle_y, store_rad,
-                       object_circles, save_name = 'ishihara_disc.png',
+                       object_circles, colour_scheme,
+                       save_name = 'ishihara_disc.png',
                        PIXEL_SCALE = 1000):
     """
     Function to plot the ishihara disc.
@@ -119,12 +120,12 @@ def plot_ishihara_disc(store_circle_x, store_circle_y, store_rad,
         ctx.close_path()
         ## If the circle lies in the object or not
         if object_circles[iii] == 1:
-            new_colour = get_colour('red-green', foreground = False)
+            new_colour = get_colour(colour_scheme, foreground = False)
             ctx.set_source_rgb(*new_colour)
             ctx.fill()
             
         else:
-            new_colour = get_colour('red-green', foreground = True)
+            new_colour = get_colour(colour_scheme, foreground = True)
             ctx.set_source_rgb(*new_colour)
             ctx.fill()
             
