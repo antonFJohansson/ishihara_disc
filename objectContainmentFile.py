@@ -36,10 +36,13 @@ class contained_pixel():
             
         ## Convert to numpy array
         self.img = asarray(image)
+        #print(self.img.shape)
+        #import matplotlib.pyplot as plt
+        #plt.imshow(self.img)
 
         self.object_colour = object_colour
     
-    def check_pixel_containment(self, x, y):
+    def check_pixel_containment(self, x, y, full_containment = False):
         
         """
         Function to check if circle is inside object.
@@ -58,13 +61,20 @@ class contained_pixel():
         pixel_x, pixel_y = self.valid_pos(pixel_x), self.valid_pos(pixel_y)
         
         pixel_store = []
-        surr_pixels = [(0,0), (1,0), (-1,0), (0,1), (0,-1)]
-        for x_step, y_step in surr_pixels:
-            new_pixel_x = pixel_x + x_step
-            new_pixel_y = pixel_y + y_step
-            new_pixel_x, new_pixel_y = self.valid_pos(new_pixel_x), self.valid_pos(new_pixel_y)
-            pixel_store.append(self.img[new_pixel_x, new_pixel_y] == self.object_colour)
-        
+        if full_containment:
+            surr_pixels = [(0,0), (1,0), (-1,0), (0,1), (0,-1)]
+            for x_step, y_step in surr_pixels:
+                new_pixel_x = pixel_x + x_step
+                new_pixel_y = pixel_y + y_step
+                new_pixel_x, new_pixel_y = self.valid_pos(new_pixel_x), self.valid_pos(new_pixel_y)
+                pixel_store.append(self.img[new_pixel_x, new_pixel_y] == self.object_colour)
+        else:
+            surr_pixels = [(0,0)]
+            for x_step, y_step in surr_pixels:
+                new_pixel_x = pixel_x + x_step
+                new_pixel_y = pixel_y + y_step
+                new_pixel_x, new_pixel_y = self.valid_pos(new_pixel_x), self.valid_pos(new_pixel_y)
+                pixel_store.append(self.img[new_pixel_x, new_pixel_y] == self.object_colour)
         return all(pixel_store)
 
 
@@ -78,6 +88,8 @@ def check_object_containment(x_pos, y_pos, object_img, object_colour = 0):
         object_img: Numpy array with the object
         object_colour: Which value that denotes the object in object_img
     """
+    #import matplotlib.pyplot as plt
+    #plt.imshow(object_img)
     
     ## Create class
     object_prop = contained_pixel(object_img, object_colour)
