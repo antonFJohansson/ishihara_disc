@@ -25,7 +25,7 @@ def shift_image(shift_key, img):
         img=np.roll(img, 1, axis = 1)
     return img
 
-def change_size(size_key, img, max_disp):
+def change_size(size_key, img, max_disp, object_colour):
     """
     Function to increase or decrease the size of the object.
     """
@@ -42,15 +42,26 @@ def change_size(size_key, img, max_disp):
     elif new_img.shape[0] < max_disp:
         ## If the image is greyscale or not
         if len(new_img.shape) > 2:
-            b_img = np.zeros((max_disp, max_disp, new_img.shape[2]))
+            
+            if object_colour == 1:
+                b_img = np.zeros((max_disp, max_disp, new_img.shape[2]))
+            else:
+                ## Mutliply with the max if white is given as 1 or 255
+                b_img = np.ones((max_disp, max_disp, new_img.shape[2]))*np.max(new_img)
+            #b_img = np.zeros((max_disp, max_disp, new_img.shape[2]))
             b_img[0:new_img.shape[0],0:new_img.shape[0],:] = new_img
         else:
-            b_img = np.zeros((max_disp, max_disp))
+            
+            if object_colour == 1:
+                b_img = np.zeros((max_disp, max_disp))
+            else:
+                ## Mutliply with the max if white is given as 1 or 255
+                b_img = np.ones((max_disp, max_disp))*np.max(new_img)
             b_img[0:new_img.shape[0],0:new_img.shape[0]] = new_img
         new_img = b_img
     return new_img
         
-def manipulate_object(object_path, max_disp = 600):
+def manipulate_object(object_path, object_colour, max_disp = 600):
 
     """
     Function to manipulate the object before creating the ishihara disc
@@ -64,8 +75,11 @@ def manipulate_object(object_path, max_disp = 600):
     ## Load the object
     image = Image.open(object_path)
     #image = image.convert('1')
+    #image = image.convert('RGBA')
 
     ## Resize image
+    #print(image.size)
+    #cv2.imshow('Image', image)
     image = image.resize((max_disp, max_disp), Image.ANTIALIAS)
     img = np.asarray(image).astype(float)
     
@@ -88,7 +102,7 @@ def manipulate_object(object_path, max_disp = 600):
         #new_img = np.copy(img)
         ## Create a representation of the ishihara disc
         new_img = cv2.circle(new_img, (int(max_disp/2), int(max_disp/2)), int(0.45*max_disp), (1,0,0), thickness=2, lineType=8, shift=0)
-        cv2.imshow('Image', new_img)
+        cv2.imshow('Display image', new_img)
 
         key_press = cv2.waitKey(0)
         
@@ -102,7 +116,7 @@ def manipulate_object(object_path, max_disp = 600):
             new_img = np.copy(img)
         ## Increase/decrease the size of the object
         elif key_press in [ord('i'), ord('o')]:
-            img = change_size(key_press, img, max_disp)
+            img = change_size(key_press, img, max_disp, object_colour)
             new_img = np.copy(img)
         elif key_press == ord('q'):
             break
