@@ -9,7 +9,7 @@ For an overview of how the program works and the ideas behind it, visit https://
 *   Choose a save name for the image where the Ishihara disc will be created. (save_name)
 *   Load an image with the desired object. (object_path)
 *   Specify if the object is represented as white or black (object_colour)
-*   Choose a colour scheme for the disc.
+*   Choose a colour scheme for the disc (possible colour schemes are "red-green , dark-green-red and dark-blue-red").
 *   Run the program.
 
 
